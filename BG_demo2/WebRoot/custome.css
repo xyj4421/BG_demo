@@ -1,0 +1,14 @@
+@CHARSET "UTF-8";
+/*
+主色:
+
+background: linear-gradient(red, blue);
+580EAD		522881		370470		8742D6		9C6AD6
+*/
+
+body{
+	
+	color:#ffffff;
+	background-color:#370470;
+
+	}

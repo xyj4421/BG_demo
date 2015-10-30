@@ -1,0 +1,23 @@
+package com.service.impl;
+
+import java.util.List;
+
+import net.sf.json.JSON;
+
+import com.service.OptionsMgr;
+
+public class OptionsMgrImpl implements OptionsMgr {
+
+	@Override
+	public List queryAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JSON queryByBusinessId(Integer bid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

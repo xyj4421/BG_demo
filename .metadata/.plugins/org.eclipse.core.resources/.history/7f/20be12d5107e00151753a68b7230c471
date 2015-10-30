@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+<constant name="struts.il8n.encoding" value="utf-8"/>
+	<package name="business_guide" extends="json-default">
+		
+		<!-- *****************************业务要素维护 -->
+		<action name="queryAllElements"
+			class="com.action.QueryAllElements" method="queryAll">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">allElements</param>
+			</result>
+		</action>
+		<action name="insertElement"
+			class="com.action.QueryAllElements" method="insert">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="deleteElement"
+			class="com.action.QueryAllElements" method="delete">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		<action name="mod_ele"
+			class="com.action.QueryAllElements" method="mod_ele">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		<!-- *****************************业务要素维护 -->
+		<!-- *****************************业务分类维护begin -->
+		<action name="queryTree"
+			class="com.action.TreeAction" method="queryTree">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">jsonTree</param>
+			</result>
+		</action>
+		
+		<action name="addNode"
+			class="com.action.TreeAction" method="addNode">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		
+		<action name="deleteNode"
+			class="com.action.TreeAction" method="deleteNode">
+			<result type="json">
+				<param name="noCache">true</param>
+			
+			</result>
+		</action>
+		<action name="mod_classify_act"
+			class="com.action.TreeAction" method="mod_classify_act">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<!-- *****************************业务分类维护end -->	
+		<!-- *****************************业务维护begin -->	
+		<action name="queryBusiness"
+			class="com.action.BusinessAction" method="queryByNode">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">business</param>
+			</result>
+		</action>
+		<action name="queryByBid"
+			class="com.action.BusinessAction" method="queryByBid">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">b</param>
+			</result>
+		</action>
+		<action name="queryAllBusiness"
+			class="com.action.BusinessAction" method="queryAll">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">allBusiness</param>
+			</result>
+		</action>
+			
+		<action name="addBusiness"
+			class="com.action.BusinessAction" method="addBusiness">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<!-- *****************************业务维护end -->	
+		<action name="findDetailByBid"
+			class="com.action.DetailsAction" method="findDetailByBid">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">listMap</param>
+			</result>
+		</action>
+	
+<action name="addBusiness2"
+			class="com.action.TreeAction" method="addBusiness2">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+<action name="questionTree"
+			class="com.action.QuestionAction" method="questionTree">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">qTree</param>
+			</result>
+		</action>
+		
+		<action name="queryById"
+			class="com.action.QuestionAction" method="queryById">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">q</param>
+				<!-- <param name="root">q</param> -->
+			</result>
+		</action>
+		<action name="queryQuestion"
+			class="com.action.QuestionAction" method="queryQuestion">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">question</param>
+			</result>
+		</action>
+		<action name="queryByQid"
+			class="com.action.OptionAction" method="queryByQid">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">question</param>
+			</result>
+		</action>
+		<action name="nextStep"
+			class="com.action.OptionAction" method="nextStep">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">question</param>
+			</result>
+		</action>
+		<action name="addOption"
+			class="com.action.OptionAction" method="insertOption">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		<action name="insertQuestion"
+			class="com.action.QuestionAction" method="insertQuestion">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		<action name="questionToJson"
+			class="com.action.QuestionAction" method="questionToJson">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">questJson</param>
+			</result>
+		</action>
+		</package></struts>    

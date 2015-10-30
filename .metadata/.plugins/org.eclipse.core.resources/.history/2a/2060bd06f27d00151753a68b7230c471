@@ -1,0 +1,19 @@
+/**********删除业务分类************/
+	function removeTreeNode() {
+		var node = $('#type_tree').tree('getSelected');
+		if (node) {
+			$.messager.confirm('��ʾ',
+					'确认删除吗？', function(
+							r) {
+						if (r) {
+							//alert("aaaaaaaaaaS");
+							$.post('deleteNode', {
+								id : node.id
+							}, function(result) {
+							$('#type_tree').tree('reload');
+								
+							});
+						}
+					});
+		}
+	}

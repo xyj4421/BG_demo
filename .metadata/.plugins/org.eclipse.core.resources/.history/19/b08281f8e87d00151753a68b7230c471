@@ -1,0 +1,150 @@
+$(function() {
+
+		/**********业务要素***********/
+	
+		$('#businessElements').datagrid({
+			url : "queryAllElements?ran="+Math.random(),
+			method:'post',
+			idField : 'id',
+			singleSelect : true,
+			toolbar : '#tb',
+			rownumbers : true,
+			columns : [ [ {				
+				field : 'id',
+				title : 'id'				
+			}, {
+				field : 'name',
+				title : '名称'
+			}, {
+				field : 'isRequired',
+				title : '是否必填',
+				formatter:function(val,row){
+				if(val){
+					return "是";
+				}else{
+				return "否";
+				}
+				
+			}
+			} ] ]
+		});
+		
+		$('#businessElements').datagrid('hideColumn','id');
+		
+		/**********业务分类***********/
+		$('#type_tree').tree({
+			url : 'queryTree',
+			animate : true,
+			onContextMenu : function(e, node) {
+				e.preventDefault();
+				$('#type_tree').tree('select', node.target);
+				$('#tree_menu').menu('show', {
+					left : e.pageX,
+					top : e.pageY
+				});
+			},
+			onClick: function(node){
+				//alert(node.id);  // 鍦ㄧ敤鎴风偣鍑荤殑鏃跺�鎻愮ず
+				var url="queryBusiness?nodeId="+node.id;
+				$('#business_datagrid').datagrid('load',url)
+			}
+
+		});
+
+		/**********鍒濆鍖栦笟鍔″垎绫�***********/
+		$('#business_datagrid').datagrid({
+			columns : [ [ {
+				field : 'id',
+				title : 'id'
+			}, {
+				field : 'title',
+				title : '涓氬姟鏍囬'
+			}, {
+				field : 'parentId',
+				title : '鎵�睘鍒嗙被'
+			} ] ]
+
+		});
+		/**********************鍒濆鍖朼ddBusiness_datagrid********************/
+		$('#addBusiness_datagrid').datagrid({
+			url : 'queryAllElements?ran='+Math.random(),
+			method:'post',
+			onClickCell: function(index,field){
+				if (endEditing()){
+					$('#addBusiness_datagrid').datagrid('selectRow', index)
+							.datagrid('editCell', {index:index,field:field});
+					editIndex = index;
+				}
+			},
+			idField : 'id',
+			singleSelect : true,
+			fitColumns:true,
+			//width:'500px',
+			//height:'400px',
+			//toolbar : '#tb',
+			//rownumbers : true,
+			columns : [ [ {
+				field : 'id',
+				title : 'id'
+			}, {
+				field : 'name',
+				title : '鍚嶇О'
+			}, {
+				field : 'isRequired',
+				title : '蹇呭～'
+			},{
+				field:'content',
+				title:'鍐呭',
+				editor:'textarea',
+				width:'200px',
+				height:'100px'
+			} ] ]
+		});
+
+
+$('#option_datagrid').datagrid({
+		toolbar:'#option_tb'
+		});
+	/*	
+$('#opt_combobox').datagrid({
+		url:'questionToJson',
+		valueField:'id',
+		textField:'text'
+		});
+		*/
+
+
+
+$('#quest_dg').datagrid({
+		url:'queryQuestion',
+		idField:'id',
+		singleSelect : true,
+		width:'300px',
+		height:'300px',
+		columns:[[{
+			field:'content'
+		}]]
+		});
+		
+		
+$('#question_datagrid').datagrid({
+		url:'queryQuestion',
+		singleSelect:true,
+		idField:'id',
+		rownumbers : true,
+		columns:[[{
+				field : 'id',
+				title : 'id'
+			}, {
+			field:'content',
+			title:'瀵艰埅闂'
+		}]],
+		onClickRow:function(rowIndex, rowData){
+			var qid = rowData.id
+			var url = "queryByQid?qid="+qid;
+			$('#option_datagrid').datagrid('load',url);
+		},
+		toolbar:'#question_tb'
+		});
+		$('#question_datagrid').datagrid('hideColumn','id');
+	});

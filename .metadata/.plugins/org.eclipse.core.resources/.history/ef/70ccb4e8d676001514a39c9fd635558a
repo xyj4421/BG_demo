@@ -1,0 +1,7 @@
+package com.service.impl;
+
+import com.service.OptionsMgr;
+
+public class OptionsMgrImpl implements OptionsMgr {
+
+}

@@ -1,0 +1,91 @@
+package com.domain;
+
+
+
+/**
+ * AbstractBusinessdetails entity provides the base persistence definition of the Businessdetails entity. @author MyEclipse Persistence Tools
+ */
+
+public abstract class AbstractBusinessdetails  implements java.io.Serializable {
+
+
+    // Fields    
+
+     private Integer id;
+     private Integer elementId;
+     private String element;
+     private String des;
+     private Integer businessId;
+
+
+    // Constructors
+
+    /** default constructor */
+    public AbstractBusinessdetails() {
+    }
+
+	/** minimal constructor */
+    public AbstractBusinessdetails(Integer businessId) {
+        this.businessId = businessId;
+    }
+    
+    /** full constructor */
+    public AbstractBusinessdetails(Integer elementId, String element, String des, Integer businessId) {
+        this.elementId = elementId;
+        this.element = element;
+        this.des = des;
+        this.businessId = businessId;
+    }
+
+   
+    // Property accessors
+
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getElementId() {
+        return this.elementId;
+    }
+    
+    public void setElementId(Integer elementId) {
+        this.elementId = elementId;
+    }
+
+    public String getElement() {
+        return this.element;
+    }
+    
+    public void setElement(String element) {
+        this.element = element;
+    }
+
+    public String getDes() {
+        return this.des;
+    }
+    
+    public void setDes(String des) {
+        this.des = des;
+    }
+
+    public Integer getBusinessId() {
+        return this.businessId;
+    }
+    
+    public void setBusinessId(Integer businessId) {
+        this.businessId = businessId;
+    }
+   
+
+
+
+
+
+
+
+
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="net.sf.json.JSONArray"/>
+<fullyQualifiedTypeName name="com.domain.Options"/>
+<fullyQualifiedTypeName name="com.dao.BaseHibernateDAO"/>
+<fullyQualifiedTypeName name="org.hibernate.Transaction"/>
+<fullyQualifiedTypeName name="net.sf.json.JSON"/>
+<fullyQualifiedTypeName name="net.sf.json.JSONObject"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="org.hibernate.Session"/>
+</qualifiedTypeNameHistroy>

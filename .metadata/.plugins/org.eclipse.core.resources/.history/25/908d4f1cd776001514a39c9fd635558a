@@ -1,0 +1,15 @@
+package com.service.impl;
+
+import java.util.List;
+
+import com.service.OptionsMgr;
+
+public class OptionsMgrImpl implements OptionsMgr {
+
+	@Override
+	public List queryAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MyHtml.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+
+  </head>
+  
+  <body>
+    <div id="addOption_window" class="easyui-window" title="新增选项"
+		style="width:500px;height:500px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="addOption_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>选项内容:</td>
+						<td><input id="optContent" class="easyui-textbox" type="text" name="optContent"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+			<td>是否指向具体业务:
+			</td>
+			<td><input type="checkbox" name="isBusiness" id="isBusiness" onclick="isBusinessCheck(this)"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>指向内容
+			</td>
+			<td><table id="quest_dg"></table>
+			</td>
+		</tr>
+				</table>
+				
+			</form>
+			
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="addOptionSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+			</div>
+		</div>
+	</div>
+  </body>
+</html>

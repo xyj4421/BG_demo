@@ -1,0 +1,183 @@
+package com.dao;
+
+import java.util.List;
+
+import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.domain.Businesselements;
+
+/**
+ * A data access object (DAO) providing persistence and search support for
+ * Businesselements entities. Transaction control of the save(), update() and
+ * delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
+ * 
+ * @see com.domain.Businesselements
+ * @author MyEclipse Persistence Tools
+ */
+
+public class BusinesselementsDAO extends BaseHibernateDAO {
+	private static final Logger log = LoggerFactory
+			.getLogger(BusinesselementsDAO.class);
+	// property constants
+	public static final String NAME = "name";
+	public static final String IS_REQUIRED = "isRequired";
+
+//	private Session sess= getSession();
+//	private Transaction tx = sess.beginTransaction();
+	public void save(Businesselements transientInstance) {
+		log.debug("saving Businesselements instance");
+		Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
+//		Transaction tx = sess.beginTransaction();
+		try {
+			getSession().save(transientInstance);
+			tx.commit();
+			System.out.println("操作结果:新增成功");
+			log.debug("save successful");
+		} catch (RuntimeException re) {
+			System.out.println("操作结果:新增失败");
+			log.error("save failed", re);
+			throw re;
+		}finally{
+			sess.flush();
+			sess.close();
+		}
+		
+	}
+
+	public void delete(Businesselements persistentInstance) {
+		Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
+		log.debug("deleting Businesselements instance");
+//		Transaction tx = getSession().beginTransaction();
+		try {
+			
+			sess.delete(persistentInstance);
+			tx.commit();
+			
+			System.out.println("操作结果：删除成功");
+			log.debug("delete successful");
+		} catch (RuntimeException re) {
+			System.out.println("操作结果：删除失败");
+			log.error("delete failed", re);
+			throw re;
+		}finally{
+//			getSession()
+			sess.flush();
+			sess.close();
+		}
+	}
+
+	public Businesselements findById(java.lang.Integer id) {
+		log.debug("getting Businesselements instance with id: " + id);
+		try {
+			Businesselements instance = (Businesselements) getSession().get(
+					"com.domain.Businesselements", id);
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
+	public List findByExample(Businesselements instance) {
+		log.debug("finding Businesselements instance by example");
+		try {
+			List results = getSession()
+					.createCriteria("com.domain.Businesselements")
+					.add(Example.create(instance)).list();
+			log.debug("find by example successful, result size: "
+					+ results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding Businesselements instance with property: "
+				+ propertyName + ", value: " + value);
+		try {
+			String queryString = "from Businesselements as model where model."
+					+ propertyName + "= ?";
+			Query queryObject = getSession().createQuery(queryString);
+			queryObject.setParameter(0, value);
+			return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	public List findByName(Object name) {
+		return findByProperty(NAME, name);
+	}
+
+	public List findByIsRequired(Object isRequired) {
+		return findByProperty(IS_REQUIRED, isRequired);
+	}
+
+	public List findAll() {
+		Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
+		log.debug("finding all Businesselements instances");
+		try {
+			String queryString = "from Businesselements";
+			Query queryObject = sess.createQuery(queryString);
+			
+			return queryObject.list();
+		} catch (RuntimeException re) {
+//			getSession().flush();
+			log.error("find all failed", re);
+			throw re;
+		}finally{
+			sess.flush();
+			sess.close();
+		}
+	}
+
+	public Businesselements merge(Businesselements detachedInstance) {
+		log.debug("merging Businesselements instance");
+		try {
+			Businesselements result = (Businesselements) getSession().merge(
+					detachedInstance);
+			log.debug("merge successful");
+			return result;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			throw re;
+		}
+	}
+
+	public void attachDirty(Businesselements instance) {
+		log.debug("attaching dirty Businesselements instance");
+		try {
+			getSession().saveOrUpdate(instance);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void attachClean(Businesselements instance) {
+		log.debug("attaching clean Businesselements instance");
+		try {
+			getSession().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+}

@@ -1,0 +1,242 @@
+package com.action;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import com.domain.Business;
+import com.domain.Businessdetails;
+import com.domain.Questions;
+import com.opensymphony.xwork2.Action;
+import com.service.impl.BusinessMgrImpl;
+import com.service.impl.DetailsMgrImpl;
+
+public class BusinessAction implements Action {
+
+	private List allBusiness;
+	private List business;
+	private Integer nodeId;
+	private String title;
+	private String details ;
+	private Integer bid;
+	private String b;
+	
+	public String getB() {
+		return b;
+	}
+
+
+
+
+	public void setB(String b) {
+		this.b = b;
+	}
+
+
+
+
+	public String getDetails() {
+		return details;
+	}
+
+
+
+
+	public void setDetails(String details) {
+		this.details = details;
+	}
+
+
+
+
+	public String getTitle() {
+		return title;
+	}
+
+
+
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
+
+
+	public Integer getNodeId() {
+		return nodeId;
+	}
+
+
+
+
+	public void setNodeId(Integer nodeId) {
+		this.nodeId = nodeId;
+	}
+
+
+
+
+	public String queryByNode() throws Exception {
+//		queryAll();
+//		System.out.println("--BusinessAction.queryByNode() is called");
+//		System.out.println("--nodeId:"+getNodeId());
+		
+		BusinessMgrImpl impl=new BusinessMgrImpl();
+		business=impl.queryByParentId(getNodeId());
+//		System.out.println("business.size()"+business.size());
+		for(Iterator i = business.iterator();i.hasNext();){
+			Business n=(Business)i.next();
+//			System.out.println(n.getId()+"  "+n.getTitle()+"  "+n.getParentId());
+		}
+		return SUCCESS;
+	}
+	public void addBusiness(){
+//		System.out.println("BusinessAction.addBusiness() is called");
+		BusinessMgrImpl impl=new BusinessMgrImpl();
+		DetailsMgrImpl detailsImpl=new DetailsMgrImpl();
+		
+		Business b = new Business();
+		System.out.println("原始参数:"+getTitle());
+		System.out.println("原始参数:"+getNodeId());
+		System.out.println("原始参数:"+getDetails());
+		
+		/*
+		b.setTitle(getTitle());
+		b.setParentId(getNodeId());
+		System.out.println("------------------------------新增业务");
+		String title = new String(b.getTitle().getBytes("utf-8"),"gb2312");
+		System.out.println("业务名称:"+title+"  \n所属分类id:"+b.getParentId());
+		impl.addBusiness(b);
+		Integer businessId = null;
+		List<Business> listBusiness = impl.queryByTitle(getTitle());
+//		System.out.println("listBusiness.size():"+listBusiness.size());
+		Iterator<Business> item=listBusiness.iterator();
+		while(item.hasNext()){
+			Business i=item.next();
+			if(i.getParentId().equals(getNodeId())){
+				businessId=i.getId();
+				
+				break;
+			}
+			
+		}
+		System.out.println("业务id:"+businessId);
+		JSONArray jsonArray = JSONArray.fromObject(getDetails());
+		System.out.println("bbb"+getDetails());
+		System.out.println("jsonArray.size():"+jsonArray.size());
+		for(int i=0;i<jsonArray.size();i++){
+			JSONObject jsonObj = jsonArray.getJSONObject(i);
+
+//			System.out.println(jsonObj.get("id")+" "+jsonObj.get("isRequired")+" "+jsonObj.get("name")+" "+jsonObj.get("content"));
+			String element = (String)jsonObj.get("content");
+			if(element==null||element.equals("")){
+				element=" ";
+			}
+			Businessdetails d =new Businessdetails();
+			d.setElementId(new Integer(jsonObj.get("id").toString()));
+//			d.setElement(jsonObj.get("content").toString()==null?"":jsonObj.get("content").toString());
+			d.setElement(element);
+			d.setBusinessId(businessId);
+			d.setDes("");
+			System.out.println(d.getElementId()+"  "+d.getElement()+"  "+d.getBusinessId());
+			detailsImpl.addDetails(d);
+		}
+		
+		
+		
+		
+//		if(businessId==null){
+//			return 
+//		}
+		*/
+		
+		
+		
+		
+	}
+	
+	
+	
+	public List getBusiness() {
+		return business;
+	}
+
+
+
+
+	public void setBusiness(List business) {
+		this.business = business;
+	}
+
+
+
+
+	public String queryAll() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("BusinessAction.queryAll() is called");
+		BusinessMgrImpl impl=new BusinessMgrImpl();
+		allBusiness=impl.queryAll();
+//		setAllElements(impl.queryAll());
+//		System.out.println("query action is called");
+		System.out.println("there is "+allBusiness.size()+" Business.");
+//		map.put("row",allElements);
+//		JSONObject json=JSONObject.fromObject(map);
+//		ActionContext.getContext().getValueStack().set("json", json);
+//		System.out.println(json.toString());
+		return SUCCESS;
+	}
+	public List getAllBusiness() {
+		return allBusiness;
+	}
+	public void setAllBusiness(List allBusiness) {
+		this.allBusiness = allBusiness;
+	}
+	@Override
+	public String execute() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public String queryByBid(){
+		BusinessMgrImpl impl=new BusinessMgrImpl();
+		b = JSONObject.fromObject(impl.queryByBid(getBid())).toString();
+//		DetailsMgrImpl detailImpl = new DetailsMgrImpl();
+//		List<Detail> detailList = detailImpl.queryByBid(getBid());
+		/*
+		List<Map<String,Object>> listMap = new ArrayList<Map<String,Object>>();
+		Map<String,Object> map = null;
+		for(Detail d:detailList)
+		{
+			map=new HashMap<String,Object>();
+			map.put("id", d.getId().toString());
+			map.put("text", d.getContent());
+			
+			listMap.add(map);
+		}
+		*/
+		
+		return SUCCESS;
+	}
+
+
+
+
+	public Integer getBid() {
+		return bid;
+	}
+
+
+
+
+	public void setBid(Integer bid) {
+		this.bid = bid;
+	}
+
+}

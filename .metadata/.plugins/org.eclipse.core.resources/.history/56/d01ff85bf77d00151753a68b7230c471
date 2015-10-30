@@ -1,0 +1,57 @@
+function mod_classify(){
+	$('#mod_classify_win').window('open');
+	var node = $('#type_tree').tree('getSelected');
+	name=node.text;
+	$("#mod_classify_name_ipt").textbox('setValue',name);
+}
+function sub_mod_classify(){
+	var node = $('#type_tree').tree('getSelected');
+	name=$("#mod_classify_name_ipt").textbox('getValue');
+	if (node) {
+		$.messager.confirm('提示',
+				'确认修改吗？', function(
+						r) {
+					if (r) {
+						$.post('mod_classify_act', {
+							id : node.id,
+							name:name
+							}, function() {
+						$('#type_tree').tree('reload');
+					$('#mod_classify_win').window('close');
+						});
+					}
+				});
+	}
+	
+}
+
+
+function mod_ele(){
+	$('#mod_ele_win').window('open');
+	var row = $('#businessElements').datagrid('getSelected');
+	name = row.name;
+	id = row.id;
+	isRequired=row.isRequired;
+	$("#ele_name").textbox('setValue',name);
+	$("#ele_isRequired").prop("checked",row.isRequired);
+	}
+
+function sub_mod_ele_form(){
+	var row = $('#businessElements').datagrid('getSelected');
+	if (row) {
+			$.messager.confirm('提示',
+					'确认修改吗？', function(
+							r) {
+						if (r) {
+							$.post('mod_ele', {
+								id : row.id,
+								name:$("#ele_name").val(),
+								isRequired:$("#ele_isRequired").prop("checked")
+							}, function() {
+							$('#businessElements').datagrid('reload');
+						$('#mod_ele_win').window('close');
+							});
+						}
+					});
+		}
+	}

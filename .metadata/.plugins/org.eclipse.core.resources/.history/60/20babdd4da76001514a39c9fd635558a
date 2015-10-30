@@ -1,0 +1,45 @@
+package com.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.dao.OptionsDAO;
+import com.dao.QuestionsDAO;
+import com.domain.Questions;
+import com.service.QuestionMgr;
+
+public class QuestionMgrImpl implements QuestionMgr {
+
+	private QuestionsDAO dao= new QuestionsDAO();
+
+	public String queryTree() {
+		System.out.println("QuestionMgrImpl.queryTree() is called");
+		// TODO Auto-generated method stub
+		List<Questions> questionList = queryAll();
+		Map<String,Object> map = null;
+		OptionsMgrImpl optionsImpl	= new OptionsMgrImpl(); 
+//		OptionsDAO optionsDao = new OptionsDAO();
+//		optionsImpl.queryByQuestionId(qid)
+		
+		for(Questions q:questionList)
+		{
+			map=new HashMap<String,Object>();
+			map.put("id", q.getId());
+			map.put("content", q.getContent());
+			map.put("des", q.getDesc());
+			System.out.println(optionsImpl.queryByQuestionId(q.getId()));
+			
+			map.put("children", optionsImpl.queryByQuestionId(q.getId())));
+		}
+		return null;
+	}
+
+	@Override
+	public List queryAll() {
+		// TODO Auto-generated method stub
+		
+		return dao.findAll();
+	}
+
+}

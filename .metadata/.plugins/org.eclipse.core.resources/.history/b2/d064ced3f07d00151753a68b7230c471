@@ -1,0 +1,51 @@
+function mod_classify(){
+	$('#mod_classify_win').window('open');
+	var node = $('#type_tree').tree('getSelected');
+	
+	//name = row.name;
+	//id = row.id;
+	//isRequired=row.isRequired;
+	//alert(name);
+	//alert("row.isRequired:  "+row.isRequired);
+$("#mod_classify_name_ipt").textbox('setValue',name);
+	//alert("ele_isRequired:  "+$("#ele_isRequired").val());
+	//$("#ele_isRequired").textbox('setValue',name)
+	//if(isRequired){
+		
+		//$("#ele_isRequired").checked=true;
+	//document.getElementById("ele_isRequired").checked=true
+	//}else{
+	//$("#ele_isRequired").attr("checked",false);
+	//$("#ele_isRequired").checked=false;
+//	$("#ele_isRequired").prop("checked",row.isRequired);
+	//document.getElementById("ele_isRequired").checked=false
+	
+	//}
+	//$("#ele_name").text("222");
+	//$("#ele_name").html("333");
+	//$("#ele_name").attr("value","val");
+	
+	
+}
+
+function sub_mod_ele_form(){
+	
+	
+	var row = $('#businessElements').datagrid('getSelected');
+	if (row) {
+			$.messager.confirm('提示',
+					'确认修改吗？', function(
+							r) {
+						if (r) {
+							$.post('mod_ele', {
+								id : row.id,
+								name:$("#ele_name").val(),
+								isRequired:$("#ele_isRequired").prop("checked")
+							}, function() {
+							$('#businessElements').datagrid('reload');
+						$('#mod_ele_win').window('close');
+							});
+						}
+					});
+		}
+	}

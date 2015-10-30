@@ -1,0 +1,83 @@
+package com.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+
+import com.dao.QuestionsDAO;
+import com.domain.Options;
+import com.domain.Questions;
+import com.service.QuestionMgr;
+
+public class QuestionMgrImpl implements QuestionMgr {
+
+	private QuestionsDAO dao= new QuestionsDAO();
+
+	public JSON queryTree() {
+		System.out.println("QuestionMgrImpl.queryTree() is called");
+		// TODO Auto-generated method stub
+		List<Questions> questionList = queryAll();
+		List<Map<String,Object>> listMap = new ArrayList<Map<String,Object>>();
+		Map<String,Object> map = null;
+		
+//		OptionsDAO optionsDao = new OptionsDAO();
+//		optionsImpl.queryByQuestionId(qid)
+		
+		
+		for(Questions q:questionList)
+		{
+			map=new HashMap<String,Object>();
+			map.put("id", q.getId());
+			map.put("content", q.getContent());
+			if(q.getDesc()==null){
+//				System.out.println("+q.getDesc():"+q.getDesc());
+				map.put("desc", "");
+			}else{
+				map.put("desc", q.getDesc());
+			}
+			
+//			System.out.println(optionsImpl.queryByQuestionId(q.getId()));
+			map.put("isBusiness", false);
+			map.put("nextId", "");
+			map.put("children", optionsToJSON(q.getId()));
+			listMap.add(map);
+		}
+		System.out.println(JSONArray.fromObject(listMap));
+		return JSONArray.fromObject(listMap);
+	}
+	public JSON optionsToJSON(Integer qid){
+		OptionsMgrImpl optionsImpl	= new OptionsMgrImpl(); 
+		List<Options> options = optionsImpl.queryByQuestionId(qid);
+		List<Map<String,Object>> listMap = new ArrayList<Map<String,Object>>();
+		Map<String,Object> map = null;
+		for(Options o:options)
+		{
+			map=new HashMap<String,Object>();
+			map.put("id", o.getId());
+			map.put("content",o.getOption());
+			if(o.getDesc()==null){
+//				System.out.println("+q.getDesc():"+q.getDesc());
+				map.put("desc", "");
+			}else{
+				map.put("desc", o.getDesc());
+			}
+			
+			map.put("isBusiness", o.getIsBusiness());
+			map.put("nextId", o.getNextId());
+			listMap.add(map);
+		}
+		return JSONArray.fromObject(listMap);
+	}
+
+	@Override
+	public List queryAll() {
+		// TODO Auto-generated method stub
+		
+		return dao.findAll();
+	}
+
+}

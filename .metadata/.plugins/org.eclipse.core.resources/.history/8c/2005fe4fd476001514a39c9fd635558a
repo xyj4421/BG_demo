@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+<constant name="struts.il8n.encoding" value="utf-8"/>
+	<package name="business_guide" extends="json-default">
+		<action name="queryAllElements"
+			class="com.action.QueryAllElements" method="queryAll">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">allElements</param>
+			</result>
+		</action>
+		<action name="insertElement"
+			class="com.action.QueryAllElements" method="insert">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		<action name="deleteElement"
+			class="com.action.QueryAllElements" method="delete">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		<action name="queryTree"
+			class="com.action.TreeAction" method="queryTree">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">jsonTree</param>
+			</result>
+		</action>
+		
+		<action name="addNode"
+			class="com.action.TreeAction" method="addNode">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		
+		<action name="deleteNode"
+			class="com.action.TreeAction" method="deleteNode">
+			<result type="json">
+				<param name="noCache">true</param>
+				
+			</result>
+		</action>
+		<action name="queryBusiness"
+			class="com.action.BusinessAction" method="queryByNode">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">business</param>
+			</result>
+		</action>
+		
+<action name="addBusiness"
+			class="com.action.BusinessAction" method="addBusiness">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+
+<action name="queryQuestion"
+			class="com.action.QuestionAction" method="queryQuestion">
+			<result type="json">
+				<param name="noCache">true</param>
+				<param name="root">question</param>
+			</result>
+		</action>
+		</package></struts>    

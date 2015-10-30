@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>admin.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+<script type="text/javascript" src="./easyui/jquery.min.js"></script>
+<script type="text/javascript" src="./easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="./easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	
+<link rel="stylesheet" type="text/css"
+	href="./easyui/themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="./easyui/themes/icon.css" />
+<script type="text/javascript" src="JSON/json2.js"></script>
+
+
+<script type="text/javascript" src="js/init.js"></script>
+<script type="text/javascript" src="js/del.js"></script>
+<script type="text/javascript" src="js/mod.js"></script>
+</head>
+<script type="text/javascript">
+	/**********************************页面初始化***************/
+	$.extend($.fn.datagrid.methods, {
+			editCell: function(jq,param){
+				return jq.each(function(){
+					var opts = $(this).datagrid('options');
+					var fields = $(this).datagrid('getColumnFields',true).concat($(this).datagrid('getColumnFields'));
+					for(var i=0; i<fields.length; i++){
+						var col = $(this).datagrid('getColumnOption', fields[i]);
+						col.editor1 = col.editor;
+						if (fields[i] != param.field){
+							col.editor = null;
+						}
+					}
+					$(this).datagrid('beginEdit', param.index);
+					for(var i=0; i<fields.length; i++){
+						var col = $(this).datagrid('getColumnOption', fields[i]);
+						col.editor = col.editor1;
+					}
+				});
+			}
+		});
+	var editIndex = undefined;
+	function endEditing(){
+		if (editIndex == undefined){return true}
+		if ($('#addBusiness_datagrid').datagrid('validateRow', editIndex)){
+			$('#addBusiness_datagrid').datagrid('endEdit', editIndex);
+			editIndex = undefined;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function endEdit(){
+		            var rows =$('#addBusiness_datagrid').datagrid('getRows');
+		            for ( var i = 0; i < rows.length; i++) {
+		            	$('#addBusiness_datagrid').datagrid('endEdit', i);
+		            }
+		        }
+
+	
+	
+	
+	
+	
+	/**********新增业务要素************/
+	function append() {
+		//alert("append() is called")
+		$('#add_window').window('open');
+		
+	}
+	/**********新增业务分类************/
+	function addNode() {
+
+		$('#addNode_window').window('open');
+		$('#treeName').text("");
+	}
+	/**********新增业务************/
+	function addBusinessSubmit(){
+		var node = $('#type_tree').tree('getSelected');
+		//alert(node.id);
+		endEdit();
+		$('#addBusiness_form').form('submit', {
+			url : 'addBusiness',
+			onSubmit : function(param) {
+				//alert("nodeId:"+node.id);
+				
+				param.nodeId=node.id;
+				
+				param.details=JSON.stringify($('#addBusiness_datagrid').datagrid('getRows'));
+				
+				//alert("allRows:"+JSON.stringify($('#addBusiness_datagrid').datagrid('getRows')));
+			},
+			success : function(data) {
+				$('#addBusiness_window').window('close');
+				var url="queryBusiness?nodeId="+node.id;
+				$('#business_datagrid').datagrid('load',url)
+				/*var allRows = new Object();
+				//alert($('#businessTitle').val());
+				allRows["details"]=	JSON.stringify($('#addBusiness_datagrid').datagrid('getRows'));
+				alert(allRows+"2");
+				$('#addBusinessDeatils_form').form('submit', {
+					url : 'addDetails',
+					onSubmit : function(param) {
+						//param.details=allRows;
+						param.details=JSON.stringify($('#addBusiness_datagrid').datagrid('getRows'));
+						param.businessTitle = $('#businessTitle').val();
+						param.pid=node.id
+					},
+					success : function(data) {
+						alert("congratulation2");
+						$('#addBusiness_window').window('close');
+					}
+				});*/
+				
+			}
+		});
+		/*
+		$('#addBusinessDeatils_form').form('submit', {
+			url : 'addBusinessDetail',
+			onSubmit : function(param) {
+				param.nodeId=node.id;
+			},
+			success : function(data) {
+				$('#addBusiness_window').window('close');
+			}
+		});
+		*/
+		
+		//alert("aaaaaaaaaa"+allRows);
+		/*
+			$.post("addDetails",allRows,function(result){
+			if(result.status){
+				alert("success");
+			}
+		},"JSON").error(function(){
+			alert("error");
+		});
+			*/
+	}
+	function addNodeSubmit() {
+		var node = $('#type_tree').tree('getSelected');
+		$('#addNode_form').form('submit', {
+			url : 'addNode',
+
+			onSubmit : function(param) {
+				param.id = node.id;
+				//param.p2=;
+				//$.messager.alert("submitForm() is called");
+			},
+			success : function(data) {
+				/*$.messager.alert("submitForm() is success");
+				
+				$('#add_window').window('close');*/
+				$('#treeName').val(" ");
+				$('#treeName').text(" ");
+				$('#addNode_window').window('close');
+				$('#type_tree').tree('reload');
+			}
+		});
+		
+	}
+	/**********新增业务要素************/
+	function submitForm() {
+		//$.messager.alert("submitForm() is called");
+		$('#add_form').form('submit', {
+			url : 'insertElement',
+			onSubmit : function() {
+				//$.messager.alert("submitForm() is called");
+			},
+			success : function() {
+				//$.messager.alert("submitForm() is success");
+				$('#add_form').form('clear');
+				$('#add_window').window('close');
+				//$('#type_tree').tree('reload');
+				$('#businessElements').datagrid('reload');
+			}
+		});
+		
+
+		//$('#add_form').submit();
+	}
+	/**********删除业务要素************/
+	function removeElement() {
+		var row = $('#businessElements').datagrid('getSelected');
+		if (row) {
+			$.messager.confirm('提示',
+					'确认删除吗？', function(
+							r) {
+						if (r) {
+							$.post('deleteElement', {
+								id : row.id
+							}, function() {
+							$('#businessElements').datagrid('reload');
+								//alert(result.success);
+								/*
+								if (result.success) {
+
+									$('#businessElements').datagrid('reload'); // reload the user data
+								} else {
+									$('#businessElements').datagrid('reload');
+									$.messager.show({ // show error message
+										title : 'Error',
+										msg : "error"
+									});
+								}*/
+							});
+						}
+					});
+		}
+
+	}
+	
+
+	function add_biz() {
+		$('#addBusiness_window').window('open');
+	}
+	function removeBusiness() {
+
+	}
+	function  addQuestion(){
+		$('#addQuestion_window').window('open');
+	
+	
+	}
+	function addQuestionSubmit(){
+	$('#addQuestion_form').form('submit', {
+			url : 'insertQuestion',
+			onSubmit : function() {
+				//$.messager.alert("submitForm() is called");
+			},
+			success : function(data) {
+				//$.messager.alert("submitForm() is success");
+				//$('#add_form').form('clear');
+				$('#addQuestion_window').window('close');
+				$('#question_datagrid').datagrid('reload');
+			}
+		});
+		
+	
+	}
+	function addOption(){
+	$('#addOption_window').window('open');
+	}
+	function addOptionSubmit(){
+	var row = $('#question_datagrid').datagrid('getSelected');
+	var next = $('#quest_dg').datagrid('getSelected');
+		//alert("问题id:"+row.id+"    指向id:"+next.id);
+		$('#addOption_form').form('submit', {
+			url : 'addOption',
+
+			onSubmit : function(param) {
+				param.qid = row.id;
+				param.nextId = next.id;
+				//param.p2=;
+				
+			},
+			success : function(data) {
+				
+				$('#addOption_window').window('close');
+			}
+		});
+		
+	}
+	
+	
+	function isBusinessCheck(e){
+	//var url="queryAllBusiness";
+	if (e.checked){
+	$('#quest_dg').datagrid({
+		url:'queryAllBusiness',
+		idField:'id',
+		singleSelect : true,
+		width:'300px',
+		height:'300px',
+		columns:[[{
+			field:'title'
+		}]]
+		});
+	}else{
+	$('#quest_dg').datagrid({
+		url:'queryQuestion',
+		idField:'id',
+		singleSelect : true,
+		width:'300px',
+		height:'300px',
+		columns:[[{
+			field:'content'
+		}]]
+		});
+		
+	}
+	}
+	
+	
+	
+	
+	
+</script>
+<body>
+
+<!--窗口 ----------------------- -->
+<!--新增选项窗口 ----------------------- -->
+	<div id="addOption_window" class="easyui-window" title="新增选项"
+		style="width:500px;height:500px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="addOption_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>选项内容:</td>
+						<td><input id="optContent" class="easyui-textbox" type="text" name="optContent"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+			<td>是否指向具体业务:
+			</td>
+			<td><input type="checkbox" name="isBusiness" id="isBusiness" onclick="isBusinessCheck(this)"></input>
+			</td>
+		</tr>
+		<tr>
+			<td>指向内容
+			</td>
+			<td><table id="quest_dg"></table>
+			</td>
+		</tr>
+				</table>
+				
+			</form>
+			
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="addOptionSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+			</div>
+		</div>
+	</div>
+<!--新增导航问题窗口 ----------------------- -->
+		<div id="addQuestion_window" class="easyui-window" title="新增导航问题"
+		style="width:500px;height:500px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="addQuestion_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>导航问题</td>
+						<td><input id="question_content" class="easyui-textbox" type="text" name="content"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+				</table>
+				
+			</form>
+			
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="addQuestionSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+			</div>
+		</div>
+	</div>
+<!--新增业务要素窗口 ----------------------- -->
+	<div id="add_window" class="easyui-window" title="新增业务要素"
+		style="width:400px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="add_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>业务要素名称</td>
+						<td><input class="easyui-textbox" type="text" name="name"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>是否必填</td>
+						<td><input type="checkbox" name="isRequired"></input>
+						</td>
+					</tr>
+
+				</table>
+			</form>
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="submitForm()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+			</div>
+		</div>
+	</div>
+<!--修改业务要素窗口 ----------------------- -->
+	<div id="mod_ele_win" class="easyui-window" title="修改业务要素"
+		style="width:400px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="mod_ele_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>业务要素名称</td>
+						<td><input id="ele_name" class="easyui-textbox" type="text" name="name"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>是否必填</td>
+						<td><input id="ele_isRequired" type="checkbox" name="isRequired"></input>
+						</td>
+					</tr>
+
+				</table>
+			</form>
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="sub_mod_ele_form()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clr_mod_ele_form()">Clear</a>
+			</div>
+		</div>
+	</div>
+	
+	
+<!-- -----------------------新增业务类型窗口 -->
+	<div id="addNode_window" class="easyui-window" title="新增业务分类"
+		style="width:400px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="addNode_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>业务分类名称</td>
+						<td><input id="treeName" class="easyui-textbox" type="text" name="name"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="addNodeSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="$('#treeName').text('');">Clear</a>
+			</div>
+		</div>
+	</div>
+	<!-- -----------------------修改业务类型窗口 -->
+	<div id="mod_classify_win" class="easyui-window" title="修改业务分类"
+		style="width:400px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="mod_classify_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>业务分类名称</td>
+						<td><input id="mod_classify_name_ipt" class="easyui-textbox" type="text" name="name"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="sub_mod_classify()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="">Clear</a>
+			</div>
+		</div>
+	</div>
+	<!-- -----------------------新增业务窗口 -->
+	<div id="addBusiness_window" class="easyui-window" title="新增业务"
+		style="width:500px;height:500px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="addBusiness_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>业务名称</td>
+						<td><input id="businessTitle" class="easyui-textbox" type="text" name="title"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+				</table>
+				
+			</form>
+			<table id="addBusiness_datagrid" ></table>
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="addBusinessSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+			</div>
+		</div>
+	</div>
+	<!-- 
+	<div id="addBusiness_window" class="easyui-window" title="Window Layout" data-options="iconCls:'icon-save',closed:true" style="width:500px;height:600px;padding:5px;">
+		<form id="addBusiness_form">
+		业务标题：<input id="businessTitle" class="easyui-textbox" type="text" name="title"></input>
+		</form>
+		<table id="addBusiness_datagrid" ></table>
+		 -->
+				
+				<!--  <form id="addBusinessDeatils_form" method="post"></form>
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="addBusinessSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="">Clear</a>
+			</div>
+		</div>
+	-->
+<!--右键菜单---业务分类树形目录 -------------------- -->
+	<div id="tree_menu" class="easyui-menu" style="width:120px;">
+		<div onclick="addNode()" data-options="iconCls:'icon-add'">新增业务分类</div>
+		<div onclick="mod_classify()" data-options="iconCls:'icon-edit'">修改业务分类</div>
+		<div onclick="removeTreeNode()" data-options="iconCls:'icon-remove'">删除业务分类</div>
+		
+		
+
+	</div>	
+
+<!-- *********************************选项卡******************************* -->
+	<div class="easyui-tabs" data-options="fit:'true'">
+		<div title="业务要素维护" style="padding:0px">
+			<table id="businessElements" class="table"></table>
+			
+			<div id="tb" style="height:auto">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-add',plain:true" onclick="append()">增加</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-remove',plain:true" onclick="removeElement()">删除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-edit',plain:true" onclick="mod_ele()">修改</a>
+
+			</div>
+
+		</div>
+		<!-- -----------------------------业务维护 -->
+		<div title="业务类型维护">
+			<!-- <div class="easyui-layout" style="width:700px;height:350px;"> -->
+		<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'west',split:true"  style="width:200px;">
+		<ul id="type_tree" class="easyui-tree"></ul>
+		
+		</div>
+		<div data-options="region:'center'">
+			<table id="business_datagrid" class="easyui-datagrid"
+					data-options="url:'queryBusiness?nodeId=1',method:'get',singleSelect:true,fit:true,fitColumns:true">
+				<thead>
+					<tr>
+						<th data-options="field:'id'">id</th>
+						<th data-options="field:'title'" >title</th>
+						<th data-options="field:'parentId',align:'right'" >parentId</th>
+						</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+		</div>
+
+ <!-- --------------------------------导航信息维护 -->
+		<div title="导航信息维护">
+		<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'west',split:true" title="West" style="width:200px;">
+		<table id="question_datagrid" style="width:100%;"></table>
+		<!-- 
+		<table id="question_datagrid" class="easyui-datagrid" style="width:100%;" data-options="
+		url:'queryQuestion',
+		singleSelect:true"> 
+		<thead>
+					<tr>
+						<th data-options="field:'content'" >content</th>
+						</tr>
+				</thead>
+		</table>
+		 -->
+		<div id="question_tb" style="height:auto">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-add',plain:true" onclick="addQuestion()">增加</a>
+				<!-- <a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-remove',plain:true" onclick="remove()">删除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
+ -->
+			</div>
+		</div>
+		<div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'">
+			<table id="option_datagrid" class="easyui-datagrid" style="width:100%;" data-options="
+		singleSelect:true">
+		<thead>
+					<tr>
+						<!-- <th data-options="field:'id'">id</th> 
+						<th data-options="field:'parentId',align:'right'" >parentId</th>
+						-->
+						<th data-options="field:'optIndex'" >index</th>
+						<th data-options="field:'optContent'" >option</th>
+						<th data-options="field:'isBusiness'" >isBusiness</th>
+						<th data-options="field:'nextId'" >nextId</th>
+						</tr>
+				</thead>
+			</table>
+			<div id="option_tb" style="height:auto">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-add',plain:true" onclick="addOption()">增加</a>
+				<!-- <a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-remove',plain:true" onclick="remove()">删除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
+ -->
+			</div>
+		</div>
+	</div>
+		
+		</div>
+
+	</div>
+</body>
+</html>

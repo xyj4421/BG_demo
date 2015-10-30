@@ -1,0 +1,20 @@
+命名规范：
+	操作：
+		修改：mod
+		新增:add
+		提交：sub
+		删除:del
+	实体：
+		Businesstree:classify
+		Business:biz
+		Businessdetails:detail
+	连接符：_
+	
+	html对象：
+		window:win
+		form:form
+		input:ipt
+		toolbar:tb
+		datagrid:dg
+	控制层：
+		action:act

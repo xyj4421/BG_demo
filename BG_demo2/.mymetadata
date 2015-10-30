@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="BG_demo2"
+  id="myeclipse.1444673875815"
+  context-root="/BG_demo2"
+  j2ee-spec="6.0"
+  archive="BG_demo2.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

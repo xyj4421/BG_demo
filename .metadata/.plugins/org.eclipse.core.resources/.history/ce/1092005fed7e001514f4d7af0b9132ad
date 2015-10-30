@@ -1,0 +1,160 @@
+package com.action;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.soap.Detail;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import com.domain.Business;
+import com.domain.Businessdetails;
+import com.domain.Businesselements;
+import com.domain.Businesstree;
+import com.opensymphony.xwork2.Action;
+import com.service.impl.BusinessMgrImpl;
+import com.service.impl.DetailsMgrImpl;
+import com.service.impl.ElementsMgrImpl;
+
+public class DetailsAction implements Action {
+
+	private String details ;
+	private String businessTitle;
+	private Integer pid;
+	private Integer bid;
+	private Integer BusinessId;
+	private List<Map<String,Object>> listMap;
+	public List<Map<String, Object>> getListMap() {
+		return listMap;
+	}
+	public void setListMap(List<Map<String, Object>> listMap) {
+		this.listMap = listMap;
+	}
+	public Integer getBid() {
+		return bid;
+	}
+	public void setBid(Integer bid) {
+		this.bid = bid;
+	}
+	public Integer getPid() {
+		return pid;
+	}
+	public void setPid(Integer pid) {
+		this.pid = pid;
+	}
+	public String getBusinessTitle() {
+		return businessTitle;
+	}
+	public void setBusinessTitle(String businessTitle) {
+		this.businessTitle = businessTitle;
+	}
+	public String getDetails() {
+		return details;
+	}
+	public void setDetails(String details) {
+		this.details = details;
+	}
+	private DetailsMgrImpl impl=new DetailsMgrImpl();
+	
+	public String findDetailByBid(){
+		List<Businessdetails> detailList = impl.queryByBid(getBid());
+		System.out.println("detailList.size():"+detailList.size());
+		ElementsMgrImpl elementImpl = new ElementsMgrImpl();
+		List<Businesselements> elementList = elementImpl.queryAll();
+		System.out.println("elementList.size():"+elementList.size());
+		List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
+		Map<String ,Object> map=null;
+		Iterator<Businessdetails> detailItem = detailList.iterator();
+		Iterator<Businesselements> elementItem = elementList.iterator();
+		
+		while(detailItem.hasNext()){
+			Businessdetails d = detailItem.next();
+			while(elementItem.hasNext()){
+				Businesselements e = elementItem.next();
+				System.out.println("d.getElementId():"+d.getElementId()+"  "+"e.getId():"+e.getId());
+				if(d.getElementId().equals(e.getId())){
+					map = new HashMap<String,Object>();
+					map.put("name", e.getName());
+					map.put("content", d.getElement());
+					break;
+				}
+			}
+				lm.add(map);
+			}
+		listMap = lm;
+		details = JSONArray.fromObject(lm).toString();
+		System.out.println(details);
+		
+		return SUCCESS;
+	}
+	
+	
+	
+	
+	public void addDetails(){
+		System.out.println("DetailsAction.addDetails() is called");
+		Integer businessId = null;
+		BusinessMgrImpl businessImpl = new BusinessMgrImpl();
+		List<Business> listBusiness = businessImpl.queryByTitle(getBusinessTitle());
+		System.out.println("listBusiness.size():"+listBusiness.size());
+		Iterator<Business> item=listBusiness.iterator();
+		while(item.hasNext()){
+			Business b=item.next();
+			if(b.getParentId().equals(getPid())){
+				businessId=b.getId();
+				
+				break;
+			}
+			
+		}
+		System.out.println("businessId:"+businessId);
+//		System.out.println("bbb"+getDetails());
+		
+		JSONArray jsonArray = JSONArray.fromObject(getDetails());
+		for(int i=0;i<jsonArray.size();i++){
+			JSONObject jsonObj = jsonArray.getJSONObject(i);
+
+			System.out.println(jsonObj.get("id")+" "+jsonObj.get("isRequired")+" "+jsonObj.get("name")+" "+jsonObj.get("content"));
+			String element = (String)jsonObj.get("content");
+			if(element==null||element.equals("")){
+				element=" ";
+			}
+			Businessdetails d =new Businessdetails();
+			d.setElementId(new Integer(jsonObj.get("id").toString()));
+//			d.setElement(jsonObj.get("content").toString()==null?"":jsonObj.get("content").toString());
+			d.setElement(element);
+			d.setBusinessId(businessId);
+			d.setDes("");
+			System.out.println(d.getElementId()+"  "+d.getElement()+"  "+d.getBusinessId());
+			impl.addDetails(d);
+		}
+		
+		
+//		JSONObject.toBean(getDetails());
+		
+//		List listDetails=JSONArray.fromObject(details);
+//		System.out.println("listDetails.size():"+listDetails.size());
+//		Iterator item=listDetails.iterator();
+////		Businessdetails d ;
+//		
+//		while(item.hasNext()){
+//			Object o =item.next();
+//			
+////			System.out.println(d.g)
+//		}
+	}
+	@Override
+	public String execute() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void union_qry_detail_act(){
+		
+		
+	}
+
+}

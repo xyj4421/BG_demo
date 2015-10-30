@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>index.html</title>
+
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="this is my page">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<!-- <link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css"></link>
+   <script type="text/javascript" src="jquery/jquery-1.11.3.min.js"></script>
+  <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+   -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" type="text/css"></link>
+
+ 
+ <script type="text/javascript" src="jquery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="JSON/json2.js"></script>
+<script>
+	var question;
+	var option;
+	$(function() {
+		initQuestion(1);
+		alert(question.id);
+		initOption(question.id);
+		/*
+		 $.post("queryById", {
+		 id : 1
+		 },
+
+		 function(data, status) {
+		 question = eval("(" + data + ")");
+		 //alert(question.id + " " + question.content);
+		 $("#question").text(question.content);
+		 $.post("queryByQid", {
+		 qid : question.id
+		 },
+
+		 function(data, status) {
+		 //alert(data[1]);
+		 jQuery.each(data, function(i, item) {
+		 // alert(item.id+","+item.optContent);   
+		 var newRow = "<tr><td>" + item.id + "</td><td>"
+		 + item.optContent + "</td><td>" + item.nextId
+		 + "</td><td>" + item.isBusiness + "</td></tr>";
+		 $("#option tr:last").after(newRow);
+
+		 });
+		 $("#option tr td:nth-child(1)").hide();
+		 $("#option tr td:nth-child(3)").hide();
+		 $("#option tr td:nth-child(4)").hide();
+		 $("#option td").click(
+		 function() {
+
+		 var tdSeq = $(this).parent().find("td").index(
+		 $(this));
+		 var trSeq = $(this).parent().parent().find("tr")
+		 .index($(this).parent())-1;
+
+		 alert($("#option tr:gt(0):eq(" + trSeq+ ") td:eq(2)").text());
+		 var nextId = $("#option tr:gt(0):eq(" + trSeq+ ") td:eq(2)").text();
+		 var isBusiness = $("#option tr:gt(0):eq(" + trSeq+ ") td:eq(3)").text();
+		 $.post("nextStep", {
+		 nextId : nextId,
+		 isBusiness:isBusiness
+		 },function(){
+		
+		 });
+		
+		 //alert("第" + (trSeq) + "行，第" + (tdSeq+1) + "列");
+		 })
+		
+		 });
+		 });
+
+		 //alert($("#option").text());
+		 */
+	});
+
+	function initQuestion(qid) {
+		$.post("queryById", {
+			id : qid
+		}, function(data, status) {
+			question = eval("(" + data + ")");
+			$("#question").text(question.content);
+			initOption(question.id);
+		});
+	}
+
+	function initOption(qid) {
+		//alert(qid);
+		$("#option").empty();
+		$.post("queryByQid", {
+			qid : qid
+		},
+
+		function(data, status) {
+			//alert(data);
+			
+			jQuery.each(data, function(i, item) {
+				// alert(item.id+","+item.optContent);   
+				var newRow = "<tr><td>" + item.id + "</td><td onclick=\"next("+item.nextId+","+item.isBusiness+")\">"
+						+ item.optContent + "</td><td>" + item.nextId
+						+ "</td><td>" + item.isBusiness + "</td></tr>";
+				$("#option").append(newRow);
+
+				
+			});
+			
+				$("#option tr td:nth-child(1)").hide();
+				$("#option tr td:nth-child(3)").hide();
+				$("#option tr td:nth-child(4)").hide();
+				/*
+			$("#option td").click(
+		 function() {
+
+		 var tdSeq = $(this).parent().find("td").index(
+		 $(this));
+		 var trSeq = $(this).parent().parent().find("tr")
+		 .index($(this).parent());
+		//alert("第"+trSeq+"行,第"+tdSeq+"列");
+		 //alert($("#option tr:gt(0):eq(" + trSeq+ ") td:eq(2)").text());
+		 var nextId = $("#option tr:gt(0):eq(" + trSeq+ ") td:eq(2)").text();
+		 var isBusiness = $("#option tr:gt(0):eq(" + trSeq+ ") td:eq(3)").text();
+		//alert("nextId:"+nextId+"    isBusiness:"+isBusiness);
+		
+		 });*/
+		});
+	}
+	function next(nextId,isBusiness){
+	//alert(nextId+"  "+isBusiness);
+	if(isBusiness){
+	$.post("queryByBid", {
+		 bid : nextId
+		 },function(data ,status){
+			var business = eval("(" + data + ")");
+			$("#title").text(business.title);
+			
+			
+			$.post("findDetailByBid", {
+		 bid : nextId
+		 },function(data ,status){
+			//var business = eval("(" + data + ")");
+			//$("#title").text(business.title);
+			$("#detailContent").empty();
+			//alert(data);
+			jQuery.each(data, function(i, item) {
+				//alert(item.name+",dddd"+item.content);
+				  
+				var newRow = "<tr><td>" + item.name +"</td><td>" + item.content + "</td></tr>";
+				$("#detailContent").append(newRow);
+				
+				
+				
+			});
+		 });
+		 
+		 
+		 
+		 });
+	$("#detail").modal("show");
+	}else{
+	initQuestion(nextId);
+	}
+	/*
+	$.post("nextStep", {
+		 nextId : nextId,
+		 isBusiness:isBusiness
+		 },function(){
+		
+		 });
+		
+		 //alert("第" + (trSeq) + "行，第" + (tdSeq+1) + "列");
+		 
+		*/
+	}
+</script>
+</head>
+
+<body>
+
+	<h1 id="question" ></h1>
+	<table id="option" class="table">
+
+	</table>
+	<div class="modal fade" id="detail" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="title">
+            </h4>
+         </div>
+         <div class="modal-body">
+            <table class="table" id="detailContent"></table>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+         </div>
+      </div>
+</div>
+
+</body>
+</html>

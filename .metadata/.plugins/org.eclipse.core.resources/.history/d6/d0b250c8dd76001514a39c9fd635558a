@@ -1,0 +1,55 @@
+package com.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+
+import com.dao.QuestionsDAO;
+import com.domain.Questions;
+import com.service.QuestionMgr;
+
+public class QuestionMgrImpl implements QuestionMgr {
+
+	private QuestionsDAO dao= new QuestionsDAO();
+
+	public JSON queryTree() {
+		System.out.println("QuestionMgrImpl.queryTree() is called");
+		// TODO Auto-generated method stub
+		List<Questions> questionList = queryAll();
+		List<Map<String,Object>> listMap = new ArrayList<Map<String,Object>>();
+		Map<String,Object> map = null;
+		OptionsMgrImpl optionsImpl	= new OptionsMgrImpl(); 
+//		OptionsDAO optionsDao = new OptionsDAO();
+//		optionsImpl.queryByQuestionId(qid)
+		
+		for(Questions q:questionList)
+		{
+			map=new HashMap<String,Object>();
+			map.put("id", q.getId());
+			map.put("content", q.getContent());
+			if(q.getDesc()==null){
+				System.out.println("+q.getDesc():"+q.getDesc());
+//				map.put("des", " ");
+			}
+			map.put("des", q.getDesc());
+//			System.out.println(optionsImpl.queryByQuestionId(q.getId()));
+			
+			map.put("children", optionsImpl.queryByQuestionId(q.getId()));
+			listMap.add(map);
+		}
+		System.out.println(JSONArray.fromObject(listMap));
+		return JSONArray.fromObject(listMap);
+	}
+
+	@Override
+	public List queryAll() {
+		// TODO Auto-generated method stub
+		
+		return dao.findAll();
+	}
+
+}

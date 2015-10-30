@@ -1,0 +1,103 @@
+package com.action;
+
+import java.util.List;
+
+import net.sf.json.JSON;
+
+import com.domain.Businesstree;
+import com.opensymphony.xwork2.Action;
+import com.service.impl.TreeMgrImpl;
+
+public class TreeAction implements Action{
+	private List<Businesstree>  Businesstree;
+	private JSON jsonTree;
+	private String name;
+	private Integer id;
+	private Integer nodeId;
+	private String title;
+	
+	public Integer getNodeId() {
+		return nodeId;
+	}
+	public void setNodeId(Integer nodeId) {
+		this.nodeId = nodeId;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	
+public void	mod_classify_act(){
+		
+	}
+public JSON getJsonTree() {
+		return jsonTree;
+	}
+
+	public void setJsonTree(JSON jsonTree) {
+		this.jsonTree = jsonTree;
+	}
+	//新增业务分类
+	public void addNode(){
+		System.out.println("------------------------------新增业务分类");
+//		System.out.println(getId()+"   "+getName());
+		TreeMgrImpl impl=new TreeMgrImpl();
+		Businesstree b = new Businesstree();
+		System.out.println("分类名称:"+getName());
+		System.out.println("上级分类id:"+getId());
+		
+		b.setName(getName());
+		b.setParentId(getId());
+		impl.addNode(b);
+		
+	}
+	public void deleteNode(){
+//		System.out.println(getId());
+		TreeMgrImpl impl=new TreeMgrImpl();
+		impl.deleteNode(getId());
+//		Businesstree b = new Businesstree();
+//		b.setName(getName());
+//		b.setParentId(getId());
+//		impl.addNode(b);
+	}
+	
+public String queryTree(){
+	System.out.println("------------------------------查询业务分类树形目录");
+	TreeMgrImpl impl=new TreeMgrImpl();
+	
+//	System.out.println("--TreeAction.queryTree() is called");
+	jsonTree=impl.createTree(impl.queryTree(),0);
+//	jsonTree.size();
+	System.out.println("分类数量:"+jsonTree.size());
+	System.out.println("--操作结果:查询成功");
+	
+//	jsonTree= impl.createTree();
+//	System.out.println("-----------------------"+jsonTree);
+	return SUCCESS;
+}
+
+@Override
+public String execute() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+}

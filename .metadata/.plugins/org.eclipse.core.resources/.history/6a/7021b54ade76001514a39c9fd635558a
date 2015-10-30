@@ -1,0 +1,33 @@
+package com.service.impl;
+
+import java.util.List;
+
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+
+import com.dao.OptionsDAO;
+import com.service.OptionsMgr;
+
+public class OptionsMgrImpl implements OptionsMgr {
+
+	private OptionsDAO dao = new OptionsDAO();
+	@Override
+	public List queryAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public JSON queryByQuestionId(Integer qid) {
+		// TODO Auto-generated method stub
+		
+		return JSONArray.fromObject(dao.findByQuestionId(qid));
+	}
+	
+	public List queryByQuestionId(Integer qid) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
+
+}

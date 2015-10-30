@@ -1,0 +1,25 @@
+function mod_classify(){
+	
+	
+	
+}
+
+function sub_mod_ele_form(){
+	var row = $('#businessElements').datagrid('getSelected');
+	if (row) {
+			$.messager.confirm('提示',
+					'确认修改吗？', function(
+							r) {
+						if (r) {
+							$.post('mod_ele', {
+								id : row.id,
+								name:$("#ele_name").val(),
+								isRequired:$("#ele_isRequired").prop("checked")
+							}, function() {
+							$('#businessElements').datagrid('reload');
+						$('#mod_ele_win').window('close');
+							});
+						}
+					});
+		}
+	}

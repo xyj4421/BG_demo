@@ -1,0 +1,3 @@
+INDEX VERSION 1.126
+D:\©Лел\workspace\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2453239995.index
+\BG_demo2\src
