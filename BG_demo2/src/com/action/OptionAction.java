@@ -12,8 +12,16 @@ public class OptionAction implements Action {
 	private Integer nextId;
 	private String optContent;
 	private Boolean isBusiness;
+	private Integer id;
 	
-	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public Integer getNextId() {
 		return nextId;
 	}
@@ -62,7 +70,7 @@ public class OptionAction implements Action {
 	}
 	
 	public String queryByQid(){
-		System.out.println("OptionAction.queryByQid() is called");
+//		System.out.println("OptionAction.queryByQid() is called");
 		question=impl.queryByQuestionId(getQid());
 		
 		return SUCCESS;
@@ -87,7 +95,17 @@ public class OptionAction implements Action {
 		
 		impl.insertOption(o);
 	}
-	
+	public void del_opt_act(){
+		System.out.println("------------------------------删除选项");
+		System.out.println("选项id:"+getId());
+		impl.del_opt(getId());
+//		System.out.println("是否指向业务:"+o.getIsBusiness());
+//		System.out.println("指向id:"+o.getNextId());
+//		System.out.println("所属导航问题id:"+o.getQuestionId());
+		
+		
+		
+	}
 	public String nextStep(){
 		if(getIsBusiness()){
 			System.out.print(getIsBusiness());

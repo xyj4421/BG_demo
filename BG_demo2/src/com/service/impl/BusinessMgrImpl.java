@@ -48,6 +48,11 @@ public class BusinessMgrImpl implements BusinessMgr{
 		// TODO Auto-generated method stub
 		dao.delete(dao.findById(id));
 	}
+	@Override
+	public void update(Business b) {
+		// TODO Auto-generated method stub
+		dao.attachDirty(b);
+	}
 
 	
 

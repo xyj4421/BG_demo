@@ -6,17 +6,22 @@
 		删除:del
 		查询：qry
 		联合：union
+		
 	实体：
 		Businesstree:classify
 		Business:biz
 		Businessdetails:detail
+		Question:qst
+		
 	连接符：_
 	
-	html对象：
+	html、javascript对象：
 		window:win
 		form:form
 		input:ipt
 		toolbar:tb
 		datagrid:dg
+		object:obj
+		document:doc
 	控制层：
 		action:act

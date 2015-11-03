@@ -95,6 +95,23 @@ public void setContent(String content) {
 //		return q.toString();
 		return SUCCESS;
 	}
+	public void del_qst_act(){
+		System.out.println("------------------------------删除导航问题");
+		System.out.println("问题id:"+getId());
+		System.out.println("问题内容:"+getContent());
+		impl.del_qst_act(id);
+	}
+	public void mod_qst_act(){
+		System.out.println("------------------------------修改导航问题");
+		System.out.println("问题id:"+getId());
+		System.out.println("问题内容:"+getContent());
+		Questions q = new Questions();
+		q.setId(getId());
+		q.setContent(getContent());
+		impl.update(q);
+		
+	}
+	
 	public String getQ() {
 		return q;
 	}

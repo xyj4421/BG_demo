@@ -20,35 +20,17 @@
 <link rel="stylesheet" type="text/css" href="./easyui/themes/icon.css" />
 <script type="text/javascript" src="JSON/json2.js"></script>
 
-
+<script type="text/javascript" src="js/var.js"></script>
+<script type="text/javascript" src="js/tools.js"></script>
 <script type="text/javascript" src="js/init.js"></script>
 <script type="text/javascript" src="js/del.js"></script>
 <script type="text/javascript" src="js/mod.js"></script>
 <script type="text/javascript" src="js/add.js"></script>
+
+
 </head>
 <script type="text/javascript">
 	/**********************************页面初始化***************/
-	$.extend($.fn.datagrid.methods, {
-			editCell: function(jq,param){
-				return jq.each(function(){
-					var opts = $(this).datagrid('options');
-					var fields = $(this).datagrid('getColumnFields',true).concat($(this).datagrid('getColumnFields'));
-					for(var i=0; i<fields.length; i++){
-						var col = $(this).datagrid('getColumnOption', fields[i]);
-						col.editor1 = col.editor;
-						if (fields[i] != param.field){
-							col.editor = null;
-						}
-					}
-					$(this).datagrid('beginEdit', param.index);
-					for(var i=0; i<fields.length; i++){
-						var col = $(this).datagrid('getColumnOption', fields[i]);
-						col.editor = col.editor1;
-					}
-				});
-			}
-		});
-	var editIndex = undefined;
 	function endEditing(){
 		if (editIndex == undefined){return true}
 		if ($('#addBusiness_datagrid').datagrid('validateRow', editIndex)){
@@ -59,35 +41,12 @@
 			return false;
 		}
 	}
-	function endEdit(){
-		            var rows =$('#addBusiness_datagrid').datagrid('getRows');
-		            for ( var i = 0; i < rows.length; i++) {
-		            	$('#addBusiness_datagrid').datagrid('endEdit', i);
-		            }
-		        }
 
-	
-	
-	
-	
-	
-	/**********新增业务要素************/
-	function append() {
-		//alert("append() is called")
-		$('#add_window').window('open');
-		
-	}
-	/**********新增业务分类************/
-	function addNode() {
-
-		$('#addNode_window').window('open');
-		$('#treeName').text("");
-	}
 	/**********新增业务************/
 	function addBusinessSubmit(){
 		var node = $('#type_tree').tree('getSelected');
 		//alert(node.id);
-		endEdit();
+		endEdit("addBusiness_datagrid");
 		$('#addBusiness_form').form('submit', {
 			url : 'addBusiness',
 			onSubmit : function(param) {
@@ -146,48 +105,8 @@
 		});
 			*/
 	}
-	function addNodeSubmit() {
-		var node = $('#type_tree').tree('getSelected');
-		$('#addNode_form').form('submit', {
-			url : 'addNode',
-
-			onSubmit : function(param) {
-				param.id = node.id;
-				//param.p2=;
-				//$.messager.alert("submitForm() is called");
-			},
-			success : function(data) {
-				/*$.messager.alert("submitForm() is success");
-				
-				$('#add_window').window('close');*/
-				$('#treeName').val(" ");
-				$('#treeName').text(" ");
-				$('#addNode_window').window('close');
-				$('#type_tree').tree('reload');
-			}
-		});
-		
-	}
-	/**********新增业务要素************/
-	function submitForm() {
-		//$.messager.alert("submitForm() is called");
-		$('#add_form').form('submit', {
-			url : 'insertElement',
-			onSubmit : function() {
-				//$.messager.alert("submitForm() is called");
-			},
-			success : function() {
-				//$.messager.alert("submitForm() is success");
-				$('#add_form').form('clear');
-				$('#add_window').window('close');
-				//$('#type_tree').tree('reload');
-				$('#businessElements').datagrid('reload');
-			}
-		});
-		
-
-		//$('#add_form').submit();
-	}
+	
+	
 	/**********删除业务要素************/
 	
 	
@@ -236,6 +155,8 @@
 			success : function(data) {
 				
 				$('#addOption_window').window('close');
+				$('#option_datagrid').datagrid('reload');
+								
 			}
 		});
 		
@@ -280,7 +201,7 @@
 <!--窗口 ----------------------- -->
 <!--新增选项窗口 ----------------------- -->
 	<div id="addOption_window" class="easyui-window" title="新增选项"
-		style="width:500px;height:500px" data-options="closed:true">
+		style="width:600px;height:500px" data-options="closed:true">
 		<div style="padding:10px 60px 20px 60px">
 			<form id="addOption_form" method="post">
 				<table cellpadding="5">
@@ -332,6 +253,29 @@
 			<div style="text-align:center;padding:5px">
 				<a href="javascript:void(0)" class="easyui-linkbutton"
 					onclick="addQuestionSubmit()">Submit</a> <a href="javascript:void(0)"
+					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+			</div>
+		</div>
+	</div>
+	<!--修改导航问题窗口 ----------------------- -->
+	<div id="mod_qst_win" class="easyui-window" title="新增导航问题"
+		style="width:500px;height:200px" data-options="closed:true">
+		<div style="padding:10px 60px 20px 60px">
+			<form id="mod_qst_form" method="post">
+				<table cellpadding="5">
+					<tr>
+						<td>导航问题</td>
+						<td><input id="mod_qst_content_ipt" class="easyui-textbox" type="text" name="content"
+							data-options="required:true"></input>
+						</td>
+					</tr>
+				</table>
+				
+			</form>
+			
+			<div style="text-align:center;padding:5px">
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					onclick="sub_mod_qst()">Submit</a> <a href="javascript:void(0)"
 					class="easyui-linkbutton" onclick="clearForm()">Clear</a>
 			</div>
 		</div>
@@ -557,7 +501,7 @@
  <!-- --------------------------------导航信息维护 -->
 		<div title="导航信息维护">
 		<div class="easyui-layout" data-options="fit:true">
-		<div data-options="region:'west',split:true" title="West" style="width:200px;">
+		<div data-options="region:'west',split:true"  style="width:200px;">
 		<table id="question_datagrid" style="width:100%;"></table>
 		<!-- 
 		<table id="question_datagrid" class="easyui-datagrid" style="width:100%;" data-options="
@@ -573,34 +517,34 @@
 		<div id="question_tb" style="height:auto">
 				<a href="javascript:void(0)" class="easyui-linkbutton"
 					data-options="iconCls:'icon-add',plain:true" onclick="addQuestion()">增加</a>
-				<!-- <a href="javascript:void(0)" class="easyui-linkbutton"
-					data-options="iconCls:'icon-remove',plain:true" onclick="remove()">删除</a>
 				<a href="javascript:void(0)" class="easyui-linkbutton"
-					data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
- -->
+					data-options="iconCls:'icon-remove',plain:true" onclick="del_qst()">删除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-edit',plain:true" onclick="mod_qst()">修改</a>
+
 			</div>
 		</div>
-		<div data-options="region:'center',title:'Main Title',iconCls:'icon-ok'">
+		<div data-options="region:'center',iconCls:'icon-ok'">
 			<table id="option_datagrid" class="easyui-datagrid" style="width:100%;" data-options="
 		singleSelect:true">
-		<thead>
+		<!-- <thead>
 					<tr>
-						<!-- <th data-options="field:'id'">id</th> 
+						<th data-options="field:'id'">id</th> 
 						<th data-options="field:'parentId',align:'right'" >parentId</th>
-						-->
+						
 						<th data-options="field:'optIndex'" >index</th>
 						<th data-options="field:'optContent'" >option</th>
 						<th data-options="field:'isBusiness'" >isBusiness</th>
 						<th data-options="field:'nextId'" >nextId</th>
 						</tr>
-				</thead>
+				</thead> -->
 			</table>
 			<div id="option_tb" style="height:auto">
 				<a href="javascript:void(0)" class="easyui-linkbutton"
 					data-options="iconCls:'icon-add',plain:true" onclick="addOption()">增加</a>
-				<!-- <a href="javascript:void(0)" class="easyui-linkbutton"
-					data-options="iconCls:'icon-remove',plain:true" onclick="remove()">删除</a>
 				<a href="javascript:void(0)" class="easyui-linkbutton"
+					data-options="iconCls:'icon-remove',plain:true" onclick="del_opt()">删除</a>
+				<!-- <a href="javascript:void(0)" class="easyui-linkbutton"
 					data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
  -->
 			</div>

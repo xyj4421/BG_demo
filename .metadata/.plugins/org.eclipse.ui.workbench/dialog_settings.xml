@@ -14,11 +14,11 @@
 		<item value="true" key="WizardZipFileResourceExportPage1.STORE_CREATE_STRUCTURE_ID"/>
 		<item value="true" key="WizardZipFileResourceExportPage1.STORE_COMPRESS_CONTENTS_ID"/>
 		<list key="WizardZipFileResourceExportPage1.STORE_DESTINATION_NAMES_ID">
+			<item value="D:\项目\外汇办事指南\BG_demo2_v15.zip"/>
+			<item value="D:\项目\外汇办事指南\BG_demo2_v14.zip"/>
 			<item value="D:\项目\外汇办事指南\BG_demo2_v13.zip"/>
 			<item value="D:\项目\外汇办事指南\BG_demo2_v12.zip"/>
 			<item value="D:\项目\外汇办事指南\BG_demo2_v11.zip"/>
-			<item value="D:\项目\外汇办事指南\BG_demo2_v10.zip"/>
-			<item value="D:\项目\外汇办事指南\BG_demo2_v9.zip"/>
 		</list>
 	</section>
 	<section name="ShowViewDialog">

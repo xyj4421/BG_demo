@@ -8,4 +8,5 @@
 <fullyQualifiedTypeName name="net.sf.json.JSONObject"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="org.hibernate.Session"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
 </qualifiedTypeNameHistroy>

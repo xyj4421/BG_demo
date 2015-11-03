@@ -68,13 +68,25 @@ public class OptionsDAO extends BaseHibernateDAO {
 	}
 
 	public void delete(Options persistentInstance) {
+		Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
 		log.debug("deleting Options instance");
 		try {
-			getSession().delete(persistentInstance);
+//			getSession().delete(persistentInstance);
+			sess.delete(persistentInstance);
+			tx.commit();
+			
+			System.out.println("--操作结果:删除选项成功");
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
+			System.out.println("--操作结果:删除选项失败");
+			System.out.println(re.fillInStackTrace());
 			log.error("delete failed", re);
 			throw re;
+		}finally{
+			sess.clear();
+			sess.flush();
+			sess.close();
 		}
 	}
 

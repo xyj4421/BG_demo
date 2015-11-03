@@ -62,10 +62,10 @@ public class DetailsAction implements Action {
 	
 	public String findDetailByBid(){
 		List<Businessdetails> detailList = impl.queryByBid(getBid());
-		System.out.println("detailList.size():"+detailList.size());
+//		System.out.println("detailList.size():"+detailList.size());
 		ElementsMgrImpl elementImpl = new ElementsMgrImpl();
 		List<Businesselements> elementList = elementImpl.queryAll();
-		System.out.println("elementList.size():"+elementList.size());
+//		System.out.println("elementList.size():"+elementList.size());
 		List<Map<String,Object>> lm = new ArrayList<Map<String,Object>>();
 		Map<String ,Object> map=null;
 		Iterator<Businessdetails> detailItem = detailList.iterator();
@@ -75,12 +75,13 @@ public class DetailsAction implements Action {
 			Businessdetails d = detailItem.next();
 			while(elementItem.hasNext()){
 				Businesselements e = elementItem.next();
-				System.out.println("d.getElementId():"+d.getElementId()+"  "+"e.getId():"+e.getId());
+//				System.out.println("d.getElementId():"+d.getElementId()+"  "+"e.getId():"+e.getId());
 				if(d.getElementId().equals(e.getId())){
 					map = new HashMap<String,Object>();
 					map.put("name", e.getName());
+					map.put("elementId", e.getId());
 					map.put("content", d.getElement());
-					map.put("id", e.getId());
+					map.put("id", d.getId());
 					map.put("isRequired", e.getIsRequired());
 					
 					break;
@@ -90,7 +91,7 @@ public class DetailsAction implements Action {
 			}
 		listMap = lm;
 		details = JSONArray.fromObject(lm).toString();
-		System.out.println(details);
+//		System.out.println(details);
 		
 		return SUCCESS;
 	}

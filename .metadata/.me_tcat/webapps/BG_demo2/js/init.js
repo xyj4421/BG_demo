@@ -106,8 +106,35 @@ $(function() {
 		
 
 $('#option_datagrid').datagrid({
-		toolbar:'#option_tb'
+	rownumbers : true,
+	idField : 'id',
+	singleSelect:true,
+	width:'100%',
+		toolbar:'#option_tb',
+		columns:[[{
+			field : 'id',
+			title : 'id'
+		},{
+			field:'optContent',
+			title:'选项内容'
+		},{
+			field:'isBusiness',
+			title:'是否跳转到具体业务',
+			formatter:function(val,row){
+				if(val){
+					return "是";
+				}else{
+				return "否";
+				}
+			}
+		},{
+			field:'nextId',
+			title:'跳转到导航问题或具体业务的id'
+			
+		}]]
 		});
+$('#option_datagrid').datagrid('hideColumn','id');
+
 	/*	
 $('#opt_combobox').datagrid({
 		url:'questionToJson',
@@ -140,7 +167,7 @@ $('#question_datagrid').datagrid({
 				title : 'id'
 			}, {
 			field:'content',
-			title:'瀵艰埅闂'
+			title:'导航问题'
 		}]],
 		onClickRow:function(rowIndex, rowData){
 			var qid = rowData.id;

@@ -11,4 +11,6 @@ public interface QuestionMgr {
 	public void insertQuestion(Questions q);
 	public JSON questionToJson();
 	public Questions queryById(Integer id);
+	public void del_qst_act(Integer id);
+	public void update(Questions q);
 }

@@ -213,14 +213,24 @@ public class BusinessdetailsDAO extends BaseHibernateDAO  {
     }
 
     public void attachDirty(Businessdetails instance) {
-        log.debug("attaching dirty Businessdetails instance");
+    	Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
+		
+    	log.debug("attaching dirty Businessdetails instance");
         try {
-            getSession().saveOrUpdate(instance);
+        	sess.saveOrUpdate(instance);
+			tx.commit();
+			System.out.println("--操作结果：修改业务明细成功");
             log.debug("attach successful");
         } catch (RuntimeException re) {
+        	System.out.println("--操作结果：修改业务明细失败");
             log.error("attach failed", re);
             throw re;
-        }
+        }finally{
+			sess.clear();
+			sess.flush();
+			sess.close();
+		}
     }
     
     public void attachClean(Businessdetails instance) {

@@ -109,5 +109,15 @@ public class QuestionMgrImpl implements QuestionMgr {
 		System.out.println("QuestionMgrImpl.queryById() is called");
 		return dao.findById(id);
 	}
+	@Override
+	public void del_qst_act(Integer id) {
+		// TODO Auto-generated method stub
+		dao.delete(dao.findById(id));
+	}
+	@Override
+	public void update(Questions q) {
+		// TODO Auto-generated method stub
+		dao.attachDirty(q);
+	}
 
 }

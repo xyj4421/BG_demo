@@ -24,7 +24,7 @@ public class OptionsMgrImpl implements OptionsMgr {
 	
 	public List queryByQuestionId(Integer qid) {
 		// TODO Auto-generated method stub
-		System.out.println("OptionsMgrImpl.queryByQuestionId() is called");
+//		System.out.println("OptionsMgrImpl.queryByQuestionId() is called");
 		return dao.findByQuestionId(qid);
 	}
 
@@ -32,6 +32,12 @@ public class OptionsMgrImpl implements OptionsMgr {
 	public void insertOption(Options o) {
 		// TODO Auto-generated method stub
 		dao.save(o);
+	}
+
+	@Override
+	public void del_opt(Integer id) {
+		// TODO Auto-generated method stub
+		dao.delete(dao.findById(id));
 	}
 
 }

@@ -12,10 +12,12 @@ import net.sf.json.JSONObject;
 
 import com.domain.Business;
 import com.domain.Businessdetails;
+import com.domain.Businesselements;
 import com.domain.Questions;
 import com.opensymphony.xwork2.Action;
 import com.service.impl.BusinessMgrImpl;
 import com.service.impl.DetailsMgrImpl;
+import com.service.impl.ElementsMgrImpl;
 
 public class BusinessAction implements Action {
 
@@ -210,25 +212,52 @@ public class BusinessAction implements Action {
 	public String queryByBid(){
 		BusinessMgrImpl impl=new BusinessMgrImpl();
 		b = JSONObject.fromObject(impl.queryByBid(getBid())).toString();
-//		DetailsMgrImpl detailImpl = new DetailsMgrImpl();
-//		List<Detail> detailList = detailImpl.queryByBid(getBid());
-		/*
-		List<Map<String,Object>> listMap = new ArrayList<Map<String,Object>>();
-		Map<String,Object> map = null;
-		for(Detail d:detailList)
-		{
-			map=new HashMap<String,Object>();
-			map.put("id", d.getId().toString());
-			map.put("text", d.getContent());
-			
-			listMap.add(map);
-		}
-		*/
-		
 		return SUCCESS;
 	}
 
+	public void mod_biz_act(){
+		System.out.println("------------------------------修改业务");
+		BusinessMgrImpl impl=new BusinessMgrImpl();
+//		ElementsMgrImpl impl=new ElementsMgrImpl();
+		System.out.println("业务id:"+getId());
+		System.out.println("业务名称:"+getTitle());
+//		System.out.println("必填:"+getIsRequired());
+		Business b = new Business();
+		b.setId(getId());
+		b.setParentId(getParentId());
+		b.setTitle(getTitle());
+		impl.update(b);
+		
+		System.out.println("------------------------------修改业务明细");
+//		System.out.println("业务id:"+businessId);
+		JSONArray jsonArray = JSONArray.fromObject(getDetails());
+//		System.out.println("bbb"+getDetails());
+//		System.out.println("jsonArray.size():"+jsonArray.size());
+		
+		DetailsMgrImpl detailMgrImpl = new DetailsMgrImpl();
+		for(int i=0;i<jsonArray.size();i++){
+			JSONObject jsonObj = jsonArray.getJSONObject(i);
 
+//			System.out.println(jsonObj.get("id")+" "+jsonObj.get("name")+" "+jsonObj.get("isRequired")+" "+jsonObj.get("content"));
+			
+			System.out.println("明细id:"+jsonObj.get("id"));
+			System.out.println("所属业务id:"+getId());
+			System.out.println("要素id:"+jsonObj.get("elementId"));
+			System.out.println("要素内容:"+jsonObj.get("content"));
+//			System.out.println("明细id:"+jsonObj.get("id"));
+			
+			
+			Businessdetails d = new Businessdetails();
+			d.setId((Integer)jsonObj.get("id"));
+			d.setBusinessId(getId());
+			d.setElementId((Integer)jsonObj.get("elementId"));
+			d.setElement(jsonObj.get("content").toString());
+			
+			detailMgrImpl.update(d);
+
+		}
+		
+	}
 
 
 	public Integer getBid() {

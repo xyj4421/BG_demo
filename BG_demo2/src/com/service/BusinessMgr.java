@@ -11,4 +11,5 @@ public interface BusinessMgr {
 	public List queryByTitle(String t);
 	public Business queryByBid(Integer bid);
 	public void del_biz(Integer id);
+	public void update(Business b);
 }

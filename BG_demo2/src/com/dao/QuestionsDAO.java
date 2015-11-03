@@ -57,13 +57,24 @@ public class QuestionsDAO extends BaseHibernateDAO {
 	}
 
 	public void delete(Questions persistentInstance) {
+		Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
 		log.debug("deleting Questions instance");
 		try {
-			getSession().delete(persistentInstance);
+			sess.delete(persistentInstance);
+			tx.commit();
+			
+			System.out.println("--操作结果:删除导航问题成功");
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
+			System.out.println("--操作结果:新增导航问题失败");
+			System.out.println(re.fillInStackTrace());
 			log.error("delete failed", re);
 			throw re;
+		}finally{
+			sess.clear();
+			sess.flush();
+			sess.close();
 		}
 	}
 
@@ -151,13 +162,23 @@ public class QuestionsDAO extends BaseHibernateDAO {
 	}
 
 	public void attachDirty(Questions instance) {
+		Session sess= getSession();
+		Transaction tx = sess.beginTransaction();
+		
 		log.debug("attaching dirty Questions instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			sess.saveOrUpdate(instance);
+		tx.commit();
+		System.out.println("--操作结果：修改导航问题成功");
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
+			System.out.println("--操作结果：修改导航问题失败");
 			log.error("attach failed", re);
 			throw re;
+		}finally{
+			sess.clear();
+			sess.flush();
+			sess.close();
 		}
 	}
 

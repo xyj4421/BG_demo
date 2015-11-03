@@ -33,5 +33,10 @@ public class DetailsMgrImpl implements DetailsMgr {
 		
 //		dao.del_detail_byBizId(bid);
 	}
+	@Override
+	public void update(Businessdetails d) {
+		// TODO Auto-generated method stub
+		dao.attachDirty(d);
+	}
 
 }

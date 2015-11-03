@@ -99,6 +99,13 @@
 				<param name="noCache">true</param>
 			</result>
 		</action>
+		<action name="mod_biz_act"
+			class="com.action.BusinessAction" method="mod_biz_act">
+			<result type="json">
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
 		<!-- *****************************业务维护end -->	
 		<!-- *****************************业务明细维护begin -->	
 		
@@ -118,6 +125,8 @@
 		</action>
 	<!-- *****************************业务明细维护end -->	
 
+
+		<!-- *****************************导航问题维护begin -->
 <action name="questionTree"
 			class="com.action.QuestionAction" method="questionTree">
 			<result type="json">
@@ -126,6 +135,13 @@
 			</result>
 		</action>
 		
+		<action name="del_qst_act"
+			class="com.action.QuestionAction" method="del_qst_act">
+			<result type="json">
+				<param name="noCache">true</param>
+				<!-- <param name="root">qTree</param> -->
+			</result>
+		</action>
 		<action name="queryById"
 			class="com.action.QuestionAction" method="queryById">
 			<result type="json">
@@ -141,11 +157,28 @@
 				<param name="root">question</param>
 			</result>
 		</action>
+		<action name="mod_qst_act"
+			class="com.action.QuestionAction" method="mod_qst_act">
+			<result type="json">
+				<param name="noCache">true</param>
+				<!-- <param name="root">qTree</param> -->
+			</result>
+		</action>
+		
+		<!-- *****************************导航问题维护end -->	
 		<action name="queryByQid"
 			class="com.action.OptionAction" method="queryByQid">
 			<result type="json">
 				<param name="noCache">true</param>
 				<param name="root">question</param>
+			</result>
+		</action>
+		
+		<action name="del_opt_act"
+			class="com.action.OptionAction" method="del_opt_act">
+			<result type="json">
+				<param name="noCache">true</param>
+				
 			</result>
 		</action>
 		<action name="nextStep"
